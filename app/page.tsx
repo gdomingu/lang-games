@@ -5,7 +5,7 @@ export default function Home() {
     <>
       <p>Home page</p>
       <Container maxWidth="sm">
-        <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+        <Box sx={{ bgcolor: '#cfe8fc', height: '50vh' }} />
       </Container>
     </>
   );
