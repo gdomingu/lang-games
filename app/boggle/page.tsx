@@ -61,10 +61,8 @@ export default function Boggle() {
           height: "100%",
           margin: 2,
           display: "flex",
-          flexDirection: "column",
         }}
       >
-        {squareGrid.length > 0 && <BoggleGrid squareGrid={squareGrid} />}
         <Button
           onClick={generate}
           variant="contained"
@@ -72,6 +70,24 @@ export default function Boggle() {
         >
           Start
         </Button>
+        {squareGrid.length > 0 && (
+          <>
+            <BoggleGrid squareGrid={squareGrid} />
+            <Box
+              sx={{
+                bgcolor: "#DEFFFC",
+                height: 200,
+                width: 100,
+                margin: "auto",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              foo
+            </Box>
+          </>
+        )}
       </Box>
     </>
   );
