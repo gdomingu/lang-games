@@ -58,24 +58,18 @@ export default function Boggle() {
       <h2>Boggle</h2>
       <Box
         sx={{
-          bgcolor: "#cfe8fc",
-          height: "50vh",
+          height: "100%",
           margin: 2,
           display: "flex",
           flexDirection: "column",
         }}
       >
-        <Box
-          sx={{
-            bgcolor: "#E2E4F6",
-            height: "30vh",
-            width: "30vh",
-            margin: "auto",
-          }}
+        {squareGrid.length > 0 && <BoggleGrid squareGrid={squareGrid} />}
+        <Button
+          onClick={generate}
+          variant="contained"
+          sx={{ margin: "auto", padding: "auto" }}
         >
-          {squareGrid.length > 0 && <BoggleGrid squareGrid={squareGrid} />}
-        </Box>
-        <Button onClick={generate} variant="contained" sx={{ margin: "auto" }}>
           Start
         </Button>
       </Box>

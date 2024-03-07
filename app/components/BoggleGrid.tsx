@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, styled } from "@mui/material";
+import { indigo } from "@mui/material/colors";
 
 interface Props {
   squareGrid: string[][];
@@ -9,12 +10,20 @@ interface Props {
 export default function BoggleGrid(props: Props) {
   const { squareGrid } = props;
 
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(indigo[400]),
+    backgroundColor: indigo[400],
+    "&:hover": {
+      backgroundColor: indigo[600],
+    },
+  }));
+
   return (
     <Box
       sx={{
         bgcolor: "#E7C8DD",
-        height: "30vh",
-        width: "30vh",
+        height: 400,
+        width: 400,
         margin: "auto",
         display: "flex",
         flexDirection: "column",
@@ -35,12 +44,19 @@ export default function BoggleGrid(props: Props) {
               {row.map((char, j) => {
                 return (
                   <>
-                    <Button
+                    <ColorButton
                       key={j}
-                      sx={{ color: "#86626E", width: "4vw", height: "4vh" }}
+                      variant="contained"
+                      color="success"
+                      sx={{
+                        fontSize: 24,
+                        fontWeight: 600,
+                        width: 65,
+                        height: 65,
+                      }}
                     >
                       {char}
-                    </Button>
+                    </ColorButton>
                   </>
                 );
               })}
