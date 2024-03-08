@@ -6,18 +6,28 @@ import { useState } from "react";
 
 interface Props {
   squareGrid: string[][];
+  word: string;
+  setWord: (word: string) => void;
   words: string[];
   setWords: (words: string[]) => void;
+  pressedTiles: number[][];
+  setPressedTiles: (pressedTiles: number[][]) => void;
 }
 
 export default function BoggleGrid(props: Props) {
-  const { squareGrid, words, setWords } = props;
+  const {
+    squareGrid,
+    words,
+    setWords,
+    word,
+    setWord,
+    pressedTiles,
+    setPressedTiles,
+  } = props;
 
-  const [word, setWord] = useState<string>("");
   const [lastCharPos, setLastCharPos] = useState<{ [key: string]: number[] }>(
     {}
   );
-  const [pressedTiles, setPressedTiles] = useState<number[][]>([]);
 
   const CharTile = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(indigo[400]),
