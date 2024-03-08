@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, styled, TextField } from "@mui/material";
-import { indigo, lightGreen, blue } from "@mui/material/colors";
+import { indigo, lightGreen, blue, green } from "@mui/material/colors";
 import { useState } from "react";
 import WordList from "./WordsList";
 
@@ -16,6 +16,7 @@ export default function BoggleGrid(props: Props) {
   const [lastCharPos, setLastCharPos] = useState<{ [key: string]: number[] }>(
     {}
   );
+  const [pressedTiles, setPressedTiles] = useState<number[][]>([]);
 
   const CharTile = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(indigo[400]),
@@ -43,6 +44,8 @@ export default function BoggleGrid(props: Props) {
 
   function createWord(char: string, location: number[]) {
     setWord(word + char);
+    const pressed = [...pressedTiles, location];
+    setPressedTiles(pressed);
     if (lastCharPos[char]) {
       if (sameCharTapped(char, location)) {
         submitWord();
@@ -76,6 +79,11 @@ export default function BoggleGrid(props: Props) {
   function resetWord() {
     setWord("");
     setLastCharPos({});
+    setPressedTiles([]);
+  }
+
+  function selectedTiles(i: number, j: number) {
+    return pressedTiles?.some((tile) => tile[0] === i && tile[1] === j);
   }
 
   return (
@@ -136,13 +144,19 @@ export default function BoggleGrid(props: Props) {
                     <CharTile
                       onClick={() => createWord(char, [i, j])}
                       key={`${i}-${j}`}
-                      variant="contained"
-                      color="success"
                       sx={{
                         fontSize: 24,
                         fontWeight: 600,
                         width: 65,
                         height: 65,
+                        backgroundColor: selectedTiles(i, j)
+                          ? green[400]
+                          : indigo[400],
+                        "&:hover": {
+                          backgroundColor: selectedTiles(i, j)
+                            ? green[400]
+                            : indigo[600],
+                        },
                       }}
                     >
                       {char}
