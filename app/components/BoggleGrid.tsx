@@ -27,7 +27,7 @@ export default function BoggleGrid(props: Props) {
     },
   }));
 
-  const GoButton = styled(Button)(() => ({
+  const SubmitButton = styled(Button)(() => ({
     color: "#fff",
     backgroundColor: lightGreen[300],
     "&:hover": {
@@ -35,7 +35,7 @@ export default function BoggleGrid(props: Props) {
     },
   }));
 
-  const ResetButton = styled(Button)(() => ({
+  const ClearButton = styled(Button)(() => ({
     color: "#fff",
     backgroundColor: blue[300],
     "&:hover": {
@@ -108,7 +108,7 @@ export default function BoggleGrid(props: Props) {
           marginBottom: 2,
         }}
       >
-        <ResetButton onClick={resetWord}>Reset</ResetButton>
+        <ClearButton onClick={resetWord}>Clear</ClearButton>
         <TextField
           id="outlined-basic"
           variant="outlined"
@@ -117,7 +117,7 @@ export default function BoggleGrid(props: Props) {
           sx={{ margin: "auto", marginRight: 2, marginLeft: 2 }}
         />
 
-        <GoButton onClick={submitWord}>Go</GoButton>
+        <SubmitButton onClick={submitWord}>Submit</SubmitButton>
       </Box>
       <Box
         sx={{
