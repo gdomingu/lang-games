@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, styled } from "@mui/material";
+import { Box, Button, styled, TextField } from "@mui/material";
 import { indigo } from "@mui/material/colors";
 import { useState } from "react";
 import WordList from "./WordsList";
@@ -17,7 +17,15 @@ export default function BoggleGrid(props: Props) {
     {}
   );
 
-  const ColorButton = styled(Button)(({ theme }) => ({
+  const CharTile = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(indigo[400]),
+    backgroundColor: indigo[400],
+    "&:hover": {
+      backgroundColor: indigo[600],
+    },
+  }));
+
+  const GoButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(indigo[400]),
     backgroundColor: indigo[400],
     "&:hover": {
@@ -29,8 +37,7 @@ export default function BoggleGrid(props: Props) {
     setWord(word + char);
     if (lastCharPos[char]) {
       if (sameCharTapped(char, location)) {
-        setWords([...words, word]);
-        setWord("");
+        submitWord();
       } else {
         updateLastCharPosition(char, location);
       }
@@ -53,50 +60,85 @@ export default function BoggleGrid(props: Props) {
     );
   }
 
+  function submitWord() {
+    setWords([...words, word]);
+    setWord("");
+  }
+
   return (
     <>
       <Box
         sx={{
-          bgcolor: "#E7C8DD",
-          height: 400,
-          width: 400,
           margin: "auto",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
         }}
       >
-        {squareGrid.map((row, i) => {
-          return (
-            <Box
-              key={i}
-              sx={{
-                margin: 2,
-                display: "flex",
-                justifyContent: "space-around",
-              }}
-            >
-              {row.map((char, j) => {
-                return (
-                  <ColorButton
-                    onClick={() => createWord(char, [i, j])}
-                    key={`${i}-${j}`}
-                    variant="contained"
-                    color="success"
-                    sx={{
-                      fontSize: 24,
-                      fontWeight: 600,
-                      width: 65,
-                      height: 65,
-                    }}
-                  >
-                    {char}
-                  </ColorButton>
-                );
-              })}
-            </Box>
-          );
-        })}
+        <Box
+          sx={{
+            margin: "auto",
+            height: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 2,
+          }}
+        >
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            disabled
+            defaultValue={word}
+            sx={{ margin: "auto", marginRight: 2 }}
+          />
+
+          <GoButton onClick={submitWord}>Go</GoButton>
+        </Box>
+        <Box
+          sx={{
+            bgcolor: "#E7C8DD",
+            height: 400,
+            width: 400,
+            margin: "auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+          }}
+        >
+          {squareGrid.map((row, i) => {
+            return (
+              <Box
+                key={i}
+                sx={{
+                  margin: 2,
+                  display: "flex",
+                  justifyContent: "space-around",
+                }}
+              >
+                {row.map((char, j) => {
+                  return (
+                    <CharTile
+                      onClick={() => createWord(char, [i, j])}
+                      key={`${i}-${j}`}
+                      variant="contained"
+                      color="success"
+                      sx={{
+                        fontSize: 24,
+                        fontWeight: 600,
+                        width: 65,
+                        height: 65,
+                      }}
+                    >
+                      {char}
+                    </CharTile>
+                  );
+                })}
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
       <Box>
         {words.length > 0 && (
