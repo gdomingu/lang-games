@@ -1,11 +1,14 @@
 "use client";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, styled } from "@mui/material";
+import { lightGreen } from "@mui/material/colors";
 import { useState } from "react";
 import BoggleGrid from "../components/BoggleGrid";
 
 export default function Boggle() {
   const [squareGrid, setSquareGrid] = useState<string[][]>([]);
+  const [startBtnText, setStartBtnText] = useState<string>("Start");
+
   const CHARS = [
     "A",
     "B",
@@ -35,7 +38,16 @@ export default function Boggle() {
     "Z",
   ];
 
+  const StartButton = styled(Button)(() => ({
+    color: "#fff",
+    backgroundColor: lightGreen[400],
+    "&:hover": {
+      backgroundColor: lightGreen[600],
+    },
+  }));
+
   function generate() {
+    setStartBtnText("Shuffle");
     let grid = [];
     for (let i = 0; i < 4; i++) {
       let row = [];
@@ -63,13 +75,13 @@ export default function Boggle() {
           display: "flex",
         }}
       >
-        <Button
+        <StartButton
           onClick={generate}
           variant="contained"
           sx={{ margin: "auto", padding: "auto" }}
         >
-          Start
-        </Button>
+          {startBtnText}
+        </StartButton>
         {squareGrid.length > 0 && (
           <>
             <BoggleGrid squareGrid={squareGrid} />
