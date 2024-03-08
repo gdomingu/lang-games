@@ -3,15 +3,16 @@
 import { Box, Button, styled, TextField } from "@mui/material";
 import { indigo, lightGreen, blue, green } from "@mui/material/colors";
 import { useState } from "react";
-import WordList from "./WordsList";
 
 interface Props {
   squareGrid: string[][];
+  words: string[];
+  setWords: (words: string[]) => void;
 }
 
 export default function BoggleGrid(props: Props) {
-  const { squareGrid } = props;
-  const [words, setWords] = useState<string[]>([]);
+  const { squareGrid, words, setWords } = props;
+
   const [word, setWord] = useState<string>("");
   const [lastCharPos, setLastCharPos] = useState<{ [key: string]: number[] }>(
     {}
@@ -72,7 +73,8 @@ export default function BoggleGrid(props: Props) {
   }
 
   function submitWord() {
-    setWords([...words, word]);
+    const newWords = [...words, word];
+    setWords(newWords);
     resetWord();
   }
 
@@ -87,94 +89,85 @@ export default function BoggleGrid(props: Props) {
   }
 
   return (
-    <>
+    <Box
+      sx={{
+        margin: "auto",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+      }}
+    >
       <Box
         sx={{
           margin: "auto",
           height: "100%",
           display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 2,
+        }}
+      >
+        <ResetButton onClick={resetWord}>Reset</ResetButton>
+        <TextField
+          id="outlined-basic"
+          variant="outlined"
+          disabled
+          defaultValue={word}
+          sx={{ margin: "auto", marginRight: 2, marginLeft: 2 }}
+        />
+
+        <GoButton onClick={submitWord}>Go</GoButton>
+      </Box>
+      <Box
+        sx={{
+          bgcolor: "#E7C8DD",
+          height: 400,
+          width: 400,
+          margin: "auto",
+          display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
         }}
       >
-        <Box
-          sx={{
-            margin: "auto",
-            height: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 2,
-          }}
-        >
-          <ResetButton onClick={resetWord}>Reset</ResetButton>
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            disabled
-            defaultValue={word}
-            sx={{ margin: "auto", marginRight: 2, marginLeft: 2 }}
-          />
-
-          <GoButton onClick={submitWord}>Go</GoButton>
-        </Box>
-        <Box
-          sx={{
-            bgcolor: "#E7C8DD",
-            height: 400,
-            width: 400,
-            margin: "auto",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-          }}
-        >
-          {squareGrid.map((row, i) => {
-            return (
-              <Box
-                key={i}
-                sx={{
-                  margin: 2,
-                  display: "flex",
-                  justifyContent: "space-around",
-                }}
-              >
-                {row.map((char, j) => {
-                  return (
-                    <CharTile
-                      onClick={() => createWord(char, [i, j])}
-                      key={`${i}-${j}`}
-                      sx={{
-                        fontSize: 24,
-                        fontWeight: 600,
-                        width: 65,
-                        height: 65,
+        {squareGrid.map((row, i) => {
+          return (
+            <Box
+              key={i}
+              sx={{
+                margin: 2,
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
+              {row.map((char, j) => {
+                return (
+                  <CharTile
+                    onClick={() => createWord(char, [i, j])}
+                    key={`${i}-${j}`}
+                    sx={{
+                      fontSize: 24,
+                      fontWeight: 600,
+                      width: 65,
+                      height: 65,
+                      backgroundColor: selectedTiles(i, j)
+                        ? green[400]
+                        : indigo[400],
+                      "&:hover": {
                         backgroundColor: selectedTiles(i, j)
                           ? green[400]
-                          : indigo[400],
-                        "&:hover": {
-                          backgroundColor: selectedTiles(i, j)
-                            ? green[400]
-                            : indigo[600],
-                        },
-                      }}
-                    >
-                      {char}
-                    </CharTile>
-                  );
-                })}
-              </Box>
-            );
-          })}
-        </Box>
+                          : indigo[600],
+                      },
+                    }}
+                  >
+                    {char}
+                  </CharTile>
+                );
+              })}
+            </Box>
+          );
+        })}
       </Box>
-      <Box>
-        {words.length > 0 && (
-          <>
-            <WordList words={words} />
-          </>
-        )}
-      </Box>
-    </>
+    </Box>
   );
 }

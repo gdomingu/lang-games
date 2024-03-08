@@ -4,10 +4,12 @@ import { Box, Button, styled } from "@mui/material";
 import { lightGreen } from "@mui/material/colors";
 import { useState } from "react";
 import BoggleGrid from "../components/BoggleGrid";
+import WordList from "../components/WordsList";
 
 export default function Boggle() {
   const [squareGrid, setSquareGrid] = useState<string[][]>([]);
   const [startBtnText, setStartBtnText] = useState<string>("Start");
+  const [words, setWords] = useState<string[]>([]);
 
   const CHARS = [
     "A",
@@ -84,19 +86,30 @@ export default function Boggle() {
         </StartButton>
         {squareGrid.length > 0 && (
           <>
-            <BoggleGrid squareGrid={squareGrid} />
+            <BoggleGrid
+              squareGrid={squareGrid}
+              words={words}
+              setWords={setWords}
+            />
             <Box
               sx={{
                 bgcolor: "#DEFFFC",
-                height: 200,
-                width: 100,
+                maxHeight: "100%",
+                height: 500,
+                width: 200,
                 margin: "auto",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              foo
+              <Box>
+                {words?.length > 0 && (
+                  <>
+                    <WordList words={words} />
+                  </>
+                )}
+              </Box>
             </Box>
           </>
         )}
