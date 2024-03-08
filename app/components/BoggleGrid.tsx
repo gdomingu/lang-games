@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, styled, TextField } from "@mui/material";
-import { indigo } from "@mui/material/colors";
+import { indigo, lightGreen, blue } from "@mui/material/colors";
 import { useState } from "react";
 import WordList from "./WordsList";
 
@@ -25,11 +25,19 @@ export default function BoggleGrid(props: Props) {
     },
   }));
 
-  const GoButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(indigo[400]),
-    backgroundColor: indigo[400],
+  const GoButton = styled(Button)(() => ({
+    color: "#fff",
+    backgroundColor: lightGreen[300],
     "&:hover": {
-      backgroundColor: indigo[600],
+      backgroundColor: lightGreen[500],
+    },
+  }));
+
+  const ResetButton = styled(Button)(() => ({
+    color: "#fff",
+    backgroundColor: blue[300],
+    "&:hover": {
+      backgroundColor: blue[500],
     },
   }));
 
@@ -62,6 +70,10 @@ export default function BoggleGrid(props: Props) {
 
   function submitWord() {
     setWords([...words, word]);
+    resetWord();
+  }
+
+  function resetWord() {
     setWord("");
     setLastCharPos({});
   }
@@ -87,12 +99,13 @@ export default function BoggleGrid(props: Props) {
             marginBottom: 2,
           }}
         >
+          <ResetButton onClick={resetWord}>Reset</ResetButton>
           <TextField
             id="outlined-basic"
             variant="outlined"
             disabled
             defaultValue={word}
-            sx={{ margin: "auto", marginRight: 2 }}
+            sx={{ margin: "auto", marginRight: 2, marginLeft: 2 }}
           />
 
           <GoButton onClick={submitWord}>Go</GoButton>
