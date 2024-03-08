@@ -63,6 +63,7 @@ export default function BoggleGrid(props: Props) {
   function submitWord() {
     setWords([...words, word]);
     setWord("");
+    setLastCharPos({});
   }
 
   return (
