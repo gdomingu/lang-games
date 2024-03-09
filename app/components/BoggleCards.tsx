@@ -175,14 +175,15 @@ export default function BoggleCards(props: Props) {
       <Card sx={{ margin: 2, padding: 3 }}>
         <Box
           sx={{
-            bgcolor: indigo[400],
+            bgcolor: "#eeeeee",
             borderRadius: "4px",
-            maxHeight: "100%",
             height: "100%",
+            maxHeight: "472px",
             width: 200,
             margin: "auto",
             display: "flex",
             justifyContent: "center",
+            overflowY: "scroll",
           }}
         >
           <Box>{words?.length > 0 && <WordList words={words} />}</Box>

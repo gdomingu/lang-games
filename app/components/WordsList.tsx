@@ -14,12 +14,11 @@ export default function WordList(props: Props) {
         return (
           <Box
             key={i}
-            mx={{
-              color: "#fff",
-              fontsize: 16,
+            sx={{
+              color: "#424242",
               fontWeight: 600,
-              marginBottom: 16,
               cursor: "pointer",
+              marginTop: 2,
             }}
           >
             {word}
