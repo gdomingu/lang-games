@@ -2,12 +2,18 @@
 
 interface Props {
   words: string[];
+  setWords: (words: string[]) => void;
 }
 import { Box, IconButton } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 export default function WordList(props: Props) {
-  const { words } = props;
+  const { words, setWords } = props;
+
+  function removeWord(wordToRemove: string) {
+    const filteredWords = words.filter((word) => word !== wordToRemove);
+    setWords(filteredWords);
+  }
 
   return (
     <>
@@ -27,7 +33,7 @@ export default function WordList(props: Props) {
           >
             <Box sx={{ marginLeft: 2 }}>{word}</Box>
             <Box sx={{ marginRight: 1 }}>
-              <IconButton>
+              <IconButton onClick={() => removeWord(word)}>
                 <DeleteOutlinedIcon></DeleteOutlinedIcon>
               </IconButton>
             </Box>

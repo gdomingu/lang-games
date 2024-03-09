@@ -184,7 +184,7 @@ export default function BoggleCards(props: Props) {
             overflowY: "scroll",
           }}
         >
-          {words?.length > 0 && <WordList words={words} />}
+          {words?.length > 0 && <WordList words={words} setWords={setWords} />}
         </Box>
       </Card>
     </Box>
