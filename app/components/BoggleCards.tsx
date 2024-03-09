@@ -60,8 +60,13 @@ export default function BoggleCards(props: Props) {
   }
 
   function submitWord() {
-    const newWords = [...words, word];
-    setWords(newWords);
+    if (words.includes(word)) {
+      alert("Already guessed!");
+    } else {
+      const newWords = [...words, word];
+      setWords(newWords);
+    }
+
     resetWord();
   }
 
