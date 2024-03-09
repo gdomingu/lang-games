@@ -181,12 +181,10 @@ export default function BoggleCards(props: Props) {
             maxHeight: "472px",
             width: 200,
             margin: "auto",
-            display: "flex",
-            justifyContent: "center",
             overflowY: "scroll",
           }}
         >
-          <Box>{words?.length > 0 && <WordList words={words} />}</Box>
+          {words?.length > 0 && <WordList words={words} />}
         </Box>
       </Card>
     </Box>

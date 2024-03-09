@@ -3,7 +3,8 @@
 interface Props {
   words: string[];
 }
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 export default function WordList(props: Props) {
   const { words } = props;
@@ -17,11 +18,19 @@ export default function WordList(props: Props) {
             sx={{
               color: "#424242",
               fontWeight: 600,
-              cursor: "pointer",
+              width: "100%",
               marginTop: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            {word}
+            <Box sx={{ marginLeft: 2 }}>{word}</Box>
+            <Box sx={{ marginRight: 1 }}>
+              <IconButton>
+                <DeleteOutlinedIcon></DeleteOutlinedIcon>
+              </IconButton>
+            </Box>
           </Box>
         );
       })}
