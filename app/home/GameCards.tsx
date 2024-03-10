@@ -9,7 +9,7 @@ export default function MediaCard() {
 
           <CardMedia
             sx={{ height: 140 }}
-            image=""
+            image="../pictionary-placeholder.jpg"
             title="Pictionary image"
           />
           <CardContent>
@@ -32,7 +32,7 @@ export default function MediaCard() {
 
           <CardMedia
             sx={{ height: 140 }}
-            image=""
+            image="../boggle-placeholder.jpg"
             title="Boggle image"
           />
           <CardContent>
