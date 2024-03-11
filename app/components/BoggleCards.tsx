@@ -13,6 +13,7 @@ interface Props {
   setWords: (words: string[]) => void;
   pressedTiles: number[][];
   setPressedTiles: (pressedTiles: number[][]) => void;
+  setErrMessage: (message: string) => void;
 }
 
 export default function BoggleCards(props: Props) {
@@ -24,12 +25,14 @@ export default function BoggleCards(props: Props) {
     setWord,
     pressedTiles,
     setPressedTiles,
+    setErrMessage,
   } = props;
 
   const [lastCharPos, setLastCharPos] = useState<number[]>([]);
 
   function createWord(char: string, location: number[]) {
-    if (invalidTileTapped(location)) return resetWord();
+    if (invalidTileTapped(location))
+      return handleError("Tile already selected!");
 
     setWord(word + char);
     const pressed = [...pressedTiles, location];
@@ -45,12 +48,10 @@ export default function BoggleCards(props: Props) {
   }
 
   function submitWord() {
-    if (words.includes(word)) {
-      alert("Already guessed!");
-    } else {
-      const newWords = [...words, word];
-      setWords(newWords);
-    }
+    if (words.includes(word)) return handleError("Already guessed!");
+
+    const newWords = [...words, word];
+    setWords(newWords);
 
     resetWord();
   }
@@ -71,6 +72,11 @@ export default function BoggleCards(props: Props) {
       !doubleTapped(location) &&
       selectedTiles(location[0], location[1])
     );
+  }
+
+  function handleError(errMessage: string) {
+    setErrMessage(errMessage);
+    resetWord();
   }
 
   return (

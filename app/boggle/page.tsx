@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, Snackbar } from "@mui/material";
 import { lightGreen } from "@mui/material/colors";
 import { useState } from "react";
 import BoggleCards from "../components/BoggleCards";
@@ -11,6 +11,7 @@ export default function Boggle() {
   const [word, setWord] = useState<string>("");
   const [words, setWords] = useState<string[]>([]);
   const [pressedTiles, setPressedTiles] = useState<number[][]>([]);
+  const [errMessage, setErrMessage] = useState<string>("");
 
   const CHARS = [
     "A",
@@ -64,6 +65,12 @@ export default function Boggle() {
     return Math.floor(Math.random() * 26);
   }
 
+  function handleClose(event: React.SyntheticEvent | Event, reason?: string) {
+    if (reason === "clickaway") return;
+
+    setErrMessage("");
+  }
+
   return (
     <>
       <Box
@@ -107,9 +114,20 @@ export default function Boggle() {
             setWord={setWord}
             pressedTiles={pressedTiles}
             setPressedTiles={setPressedTiles}
+            setErrMessage={setErrMessage}
           />
         )}
       </Box>
+      {!!errMessage && (
+        <Snackbar
+          ContentProps={{ sx: { backgroundColor: "#e57373" } }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          open={!!errMessage}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          message={errMessage}
+        />
+      )}
     </>
   );
 }
