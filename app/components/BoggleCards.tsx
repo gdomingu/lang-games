@@ -115,9 +115,9 @@ export default function BoggleCards(props: Props) {
                 sx={{
                   color: "#fff",
                   height: 56,
-                  backgroundColor: blue[300],
+                  backgroundColor: blue[500],
                   "&:hover": {
-                    backgroundColor: blue[500],
+                    backgroundColor: blue[700],
                   },
                 }}
                 onClick={resetWord}
@@ -136,9 +136,9 @@ export default function BoggleCards(props: Props) {
                 sx={{
                   color: "#fff",
                   height: 56,
-                  backgroundColor: lightGreen[300],
+                  backgroundColor: lightGreen[500],
                   "&:hover": {
-                    backgroundColor: lightGreen[500],
+                    backgroundColor: lightGreen[700],
                   },
                 }}
                 onClick={submitWord}
