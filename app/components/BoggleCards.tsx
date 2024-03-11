@@ -148,6 +148,7 @@ export default function BoggleCards(props: Props) {
                         width: 65,
                         height: 65,
                         color: "#fff",
+                        boxShadow: "5px 5px 5px 2px rgba(0,0,0,0.2)",
                         backgroundColor: selectedTiles(i, j)
                           ? green[400]
                           : indigo[400],
