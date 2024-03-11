@@ -1,13 +1,12 @@
 "use client";
 
 import { Box, Button, Snackbar } from "@mui/material";
-import { lightGreen } from "@mui/material/colors";
-import { useState } from "react";
+import { orange } from "@mui/material/colors";
+import { useState, useEffect } from "react";
 import BoggleCards from "../components/BoggleCards";
 
 export default function Boggle() {
   const [squareGrid, setSquareGrid] = useState<string[][]>([]);
-  const [startBtnText, setStartBtnText] = useState<string>("Start");
   const [word, setWord] = useState<string>("");
   const [words, setWords] = useState<string[]>([]);
   const [pressedTiles, setPressedTiles] = useState<number[][]>([]);
@@ -42,8 +41,11 @@ export default function Boggle() {
     "Z",
   ];
 
+  useEffect(() => {
+    generate();
+  }, []);
+
   function generate() {
-    setStartBtnText("Shuffle");
     setWord("");
     setWords([]);
     setPressedTiles([]);
@@ -73,61 +75,64 @@ export default function Boggle() {
 
   return (
     <>
-      <Box
-        sx={{
-          height: "100%",
-          margin: 2,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        }}
-      >
-        <Box>
-          <h2>Boggle</h2>
-        </Box>
-        <Box>
-          <Button
-            onClick={generate}
-            variant="contained"
+      {squareGrid.length > 0 && (
+        <>
+          <Box
             sx={{
-              margin: "auto",
-              padding: "auto",
-              color: "#fff",
-              backgroundColor: lightGreen[400],
-              "&:hover": {
-                backgroundColor: lightGreen[600],
-              },
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-evenly",
+              alignItems: "center",
             }}
           >
-            {startBtnText}
-          </Button>
-        </Box>
-      </Box>
-      <Box sx={{ display: "flex" }}>
-        {squareGrid.length > 0 && (
-          <BoggleCards
-            squareGrid={squareGrid}
-            words={words}
-            setWords={setWords}
-            word={word}
-            setWord={setWord}
-            pressedTiles={pressedTiles}
-            setPressedTiles={setPressedTiles}
-            errMessage={errMessage}
-            setErrMessage={setErrMessage}
-          />
-        )}
-      </Box>
-      {!!errMessage && (
-        <Snackbar
-          ContentProps={{ sx: { backgroundColor: "#e57373" } }}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          open={!!errMessage}
-          autoHideDuration={2000}
-          onClose={handleClose}
-          message={errMessage}
-        />
+            <Box>
+              <h2>Boggle</h2>
+            </Box>
+            <Box>
+              <Button
+                onClick={generate}
+                variant="contained"
+                sx={{
+                  margin: "auto",
+                  padding: "auto",
+                  color: "#fff",
+                  backgroundColor: orange[500],
+                  "&:hover": {
+                    backgroundColor: orange[700],
+                  },
+                }}
+              >
+                SHUFFLE
+              </Button>
+            </Box>
+          </Box>
+
+          <Box sx={{ display: "flex" }}>
+            <BoggleCards
+              squareGrid={squareGrid}
+              words={words}
+              setWords={setWords}
+              word={word}
+              setWord={setWord}
+              pressedTiles={pressedTiles}
+              setPressedTiles={setPressedTiles}
+              errMessage={errMessage}
+              setErrMessage={setErrMessage}
+            />
+          </Box>
+
+          {!!errMessage && (
+            <Snackbar
+              ContentProps={{ sx: { backgroundColor: "#e57373" } }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              open={!!errMessage}
+              autoHideDuration={2000}
+              onClose={handleClose}
+              message={errMessage}
+            />
+          )}
+        </>
       )}
     </>
   );
