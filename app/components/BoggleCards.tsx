@@ -26,37 +26,22 @@ export default function BoggleCards(props: Props) {
     setPressedTiles,
   } = props;
 
-  const [lastCharPos, setLastCharPos] = useState<{ [key: string]: number[] }>(
-    {}
-  );
+  const [lastCharPos, setLastCharPos] = useState<number[]>([]);
 
   function createWord(char: string, location: number[]) {
+    if (invalidTileTapped(location)) return resetWord();
+
     setWord(word + char);
     const pressed = [...pressedTiles, location];
     setPressedTiles(pressed);
-    if (lastCharPos[char]) {
-      if (sameCharTapped(char, location)) {
-        submitWord();
-      } else {
-        updateLastCharPosition(char, location);
-      }
-    } else {
-      updateLastCharPosition(char, location);
-    }
+
+    if (lastCharPos.length === 0) return setLastCharPos(location);
+
+    doubleTapped(location) ? submitWord() : setLastCharPos(location);
   }
 
-  function updateLastCharPosition(char: string, location: number[]) {
-    let currentPosition: { [key: string]: number[] } = {};
-    currentPosition[char] = location;
-
-    setLastCharPos(currentPosition);
-  }
-
-  function sameCharTapped(char: string, location: number[]) {
-    return (
-      lastCharPos[char][0] === location[0] &&
-      lastCharPos[char][1] === location[1]
-    );
+  function doubleTapped(location: number[]) {
+    return lastCharPos[0] === location[0] && lastCharPos[1] === location[1];
   }
 
   function submitWord() {
@@ -72,12 +57,20 @@ export default function BoggleCards(props: Props) {
 
   function resetWord() {
     setWord("");
-    setLastCharPos({});
+    setLastCharPos([]);
     setPressedTiles([]);
   }
 
   function selectedTiles(i: number, j: number) {
     return pressedTiles?.some((tile) => tile[0] === i && tile[1] === j);
+  }
+
+  function invalidTileTapped(location: number[]) {
+    return (
+      lastCharPos.length > 0 &&
+      !doubleTapped(location) &&
+      selectedTiles(location[0], location[1])
+    );
   }
 
   return (
@@ -142,10 +135,7 @@ export default function BoggleCards(props: Props) {
             return (
               <Box
                 key={i}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-evenly",
-                }}
+                sx={{ display: "flex", justifyContent: "space-evenly" }}
               >
                 {row.map((char, j) => {
                   return (
