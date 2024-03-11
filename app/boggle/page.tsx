@@ -114,6 +114,7 @@ export default function Boggle() {
             setWord={setWord}
             pressedTiles={pressedTiles}
             setPressedTiles={setPressedTiles}
+            errMessage={errMessage}
             setErrMessage={setErrMessage}
           />
         )}
@@ -123,7 +124,7 @@ export default function Boggle() {
           ContentProps={{ sx: { backgroundColor: "#e57373" } }}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           open={!!errMessage}
-          autoHideDuration={3000}
+          autoHideDuration={2000}
           onClose={handleClose}
           message={errMessage}
         />
