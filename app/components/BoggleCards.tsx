@@ -3,8 +3,6 @@
 import { Box, Button, TextField, Card } from "@mui/material";
 import { indigo, lightGreen, blue, green } from "@mui/material/colors";
 import { keyframes } from "@mui/system";
-
-import { useState } from "react";
 import WordList from "./WordsList";
 
 interface Props {
@@ -32,8 +30,6 @@ export default function BoggleCards(props: Props) {
     setErrMessage,
   } = props;
 
-  const [lastCharPos, setLastCharPos] = useState<number[]>([]);
-
   function createWord(char: string, location: number[]) {
     if (invalidTileTapped(location))
       return handleError("Tile already selected!");
@@ -42,13 +38,16 @@ export default function BoggleCards(props: Props) {
     const pressed = [...pressedTiles, location];
     setPressedTiles(pressed);
 
-    if (lastCharPos.length === 0) return setLastCharPos(location);
-
-    doubleTapped(location) ? submitWord() : setLastCharPos(location);
+    if (pressedTiles.length > 0 && doubleTapped(location)) return submitWord();
   }
 
   function doubleTapped(location: number[]) {
-    return lastCharPos[0] === location[0] && lastCharPos[1] === location[1];
+    const lastPressedTileIndex = pressedTiles.length - 1;
+    const lastPressedTile = pressedTiles[lastPressedTileIndex];
+
+    return (
+      lastPressedTile[0] === location[0] && lastPressedTile[1] === location[1]
+    );
   }
 
   function submitWord() {
@@ -56,25 +55,23 @@ export default function BoggleCards(props: Props) {
 
     const newWords = [...words, word];
     setWords(newWords);
-
     resetWord();
   }
 
   function resetWord() {
     setWord("");
-    setLastCharPos([]);
     setPressedTiles([]);
   }
 
-  function selectedTiles(i: number, j: number) {
+  function tileSelected(i: number, j: number) {
     return pressedTiles?.some((tile) => tile[0] === i && tile[1] === j);
   }
 
   function invalidTileTapped(location: number[]) {
     return (
-      lastCharPos.length > 0 &&
+      pressedTiles.length > 0 &&
       !doubleTapped(location) &&
-      selectedTiles(location[0], location[1])
+      tileSelected(location[0], location[1])
     );
   }
 
@@ -84,7 +81,6 @@ export default function BoggleCards(props: Props) {
 
     // delay for Snackbar autoHideDuration
     setTimeout(() => {
-      setLastCharPos([]);
       setPressedTiles([]);
     }, 1500);
   }
@@ -175,16 +171,16 @@ export default function BoggleCards(props: Props) {
                           height: 65,
                           color: "#fff",
                           boxShadow: "5px 5px 5px 2px rgba(0,0,0,0.2)",
-                          backgroundColor: selectedTiles(i, j)
+                          backgroundColor: tileSelected(i, j)
                             ? green[400]
                             : indigo[400],
                           "&:hover": {
-                            backgroundColor: selectedTiles(i, j)
+                            backgroundColor: tileSelected(i, j)
                               ? green[400]
                               : indigo[600],
                           },
                           animation:
-                            !!errMessage && selectedTiles(i, j)
+                            !!errMessage && tileSelected(i, j)
                               ? `${shake} 0.5s infinite ease`
                               : null,
                         }}
@@ -198,23 +194,7 @@ export default function BoggleCards(props: Props) {
             })}
           </Box>
         </Card>
-        <Card sx={{ margin: 2, padding: 3 }}>
-          <Box
-            sx={{
-              bgcolor: "#eeeeee",
-              borderRadius: "4px",
-              height: "100%",
-              maxHeight: "472px",
-              width: 200,
-              margin: "auto",
-              overflowY: "scroll",
-            }}
-          >
-            {words?.length > 0 && (
-              <WordList words={words} setWords={setWords} />
-            )}
-          </Box>
-        </Card>
+        <WordList words={words} setWords={setWords} />
       </Box>
     </>
   );
