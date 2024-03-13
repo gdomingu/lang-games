@@ -163,6 +163,7 @@ export default function BoggleCards(props: Props) {
                 sx={{
                   color: "#fff",
                   height: 56,
+                  width: 160,
                   backgroundColor: blue[500],
                   "&:hover": {
                     backgroundColor: blue[700],
@@ -177,35 +178,37 @@ export default function BoggleCards(props: Props) {
                 variant="outlined"
                 disabled
                 defaultValue={word}
-                sx={{ marginRight: 2, marginLeft: 2 }}
+                sx={{ marginRight: 2, marginLeft: 2, width: 220 }}
               />
-              <Button
-                sx={{
-                  color: "#fff",
-                  height: 56,
-                  backgroundColor: lightGreen[500],
-                  "&:hover": {
-                    backgroundColor: lightGreen[700],
-                  },
-                }}
-                onClick={submitWord}
-              >
-                Submit
-              </Button>
-              <Button
-                sx={{
-                  color: "#fff",
-                  marginLeft: 2,
-                  height: 56,
-                  backgroundColor: purple[500],
-                  "&:hover": {
-                    backgroundColor: purple[700],
-                  },
-                }}
-                onClick={handleRotateBoard}
-              >
-                Rotate
-              </Button>
+              <Box sx={{ display: "flex" }}>
+                <Button
+                  sx={{
+                    color: "#fff",
+                    height: 56,
+                    backgroundColor: lightGreen[500],
+                    "&:hover": {
+                      backgroundColor: lightGreen[700],
+                    },
+                  }}
+                  onClick={submitWord}
+                >
+                  Submit
+                </Button>
+                <Button
+                  sx={{
+                    color: "#fff",
+                    marginLeft: 2,
+                    height: 56,
+                    backgroundColor: purple[500],
+                    "&:hover": {
+                      backgroundColor: purple[700],
+                    },
+                  }}
+                  onClick={handleRotateBoard}
+                >
+                  Rotate
+                </Button>
+              </Box>
             </Box>
           </Box>
           <Box
