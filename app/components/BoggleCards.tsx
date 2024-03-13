@@ -56,6 +56,7 @@ export default function BoggleCards(props: Props) {
   }
 
   function submitWord() {
+    if (!word) return handleError("Please select letters!");
     if (words.includes(word)) return handleError("Already guessed!");
 
     const newWords = [...words, word];
