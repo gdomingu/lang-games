@@ -114,9 +114,15 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Language Games
-          </Typography>
+          <Link
+            href="/"
+            passHref
+            style={{ color: "inherit", textDecoration: "inherit" }}
+          >
+            <Typography variant="h6" noWrap component="div">
+              Language Games
+            </Typography>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
