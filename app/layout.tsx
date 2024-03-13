@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import NavLayout from "./NavLayout";
 import { Container } from "@mui/material";
 
@@ -18,12 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={inter.className}
+        style={{ backgroundColor: "rgba(243, 246, 249, 0.6)" }}
+      >
         <AppRouterCacheProvider>
           <NavLayout>
-            <Container>
-              {children}
-            </Container>
+            <Container>{children}</Container>
           </NavLayout>
         </AppRouterCacheProvider>
       </body>
