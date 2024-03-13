@@ -84,6 +84,7 @@ export default function Boggle() {
           <Box sx={{ display: "flex" }}>
             <BoggleCards
               squareGrid={squareGrid}
+              setSquareGrid={setSquareGrid}
               words={words}
               setWords={setWords}
               word={word}

@@ -1,12 +1,14 @@
 "use client";
 
 import { Box, Button, TextField, Card } from "@mui/material";
-import { indigo, lightGreen, blue, green } from "@mui/material/colors";
+import { indigo, lightGreen, blue, green, purple } from "@mui/material/colors";
 import { keyframes } from "@mui/system";
 import WordList from "./WordsList";
+import { useState } from "react";
 
 interface Props {
   squareGrid: string[][];
+  setSquareGrid: (squareGrid: string[][]) => void;
   word: string;
   setWord: (word: string) => void;
   words: string[];
@@ -20,6 +22,7 @@ interface Props {
 export default function BoggleCards(props: Props) {
   const {
     squareGrid,
+    setSquareGrid,
     words,
     setWords,
     word,
@@ -29,6 +32,8 @@ export default function BoggleCards(props: Props) {
     errMessage,
     setErrMessage,
   } = props;
+
+  const [rotate, setRotate] = useState<boolean>(false);
 
   function createWord(char: string, location: number[]) {
     if (invalidTileTapped(location))
@@ -51,6 +56,7 @@ export default function BoggleCards(props: Props) {
   }
 
   function submitWord() {
+    if (!word) return handleError("Please select letters!");
     if (words.includes(word)) return handleError("Already guessed!");
 
     const newWords = [...words, word];
@@ -85,6 +91,29 @@ export default function BoggleCards(props: Props) {
     }, 1500);
   }
 
+  function handleRotateBoard() {
+    resetWord();
+    setRotate(true);
+
+    setTimeout(() => {
+      newBoardAfterRotate();
+      setRotate(false);
+    }, 800);
+  }
+
+  function newBoardAfterRotate() {
+    let newGrid: string[][] = [];
+    for (let i = 0; i < 4; i++) {
+      let newRow: string[] = [];
+      for (let j = 3; j >= 0; j--) {
+        const char = squareGrid[j][i];
+        newRow.push(char);
+      }
+      newGrid.push(newRow);
+    }
+    setSquareGrid(newGrid);
+  }
+
   const shake = keyframes`
     from {
       transform: rotate(-3deg);
@@ -94,11 +123,35 @@ export default function BoggleCards(props: Props) {
     }
   `;
 
+  const rotateBoard = keyframes`
+    from {
+      transform: rotate(0deg);
+    } to {
+      transform: rotate(90deg);
+    }
+  `;
+
+  const rotateTile = keyframes`
+    from {
+      transform: rotate(0deg);
+    } to {
+      transform: rotate(-90deg);
+    }
+  `;
+
   return (
     <>
       <Box sx={{ display: "flex", margin: "auto" }}>
-        <Card sx={{ margin: 2, padding: 3 }}>
-          <Box sx={{ display: "flex" }}>
+        <Card
+          sx={{
+            margin: 2,
+            padding: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Box>
             <Box
               sx={{
                 margin: "auto",
@@ -111,6 +164,7 @@ export default function BoggleCards(props: Props) {
                 sx={{
                   color: "#fff",
                   height: 56,
+                  width: 160,
                   backgroundColor: blue[500],
                   "&:hover": {
                     backgroundColor: blue[700],
@@ -125,32 +179,48 @@ export default function BoggleCards(props: Props) {
                 variant="outlined"
                 disabled
                 defaultValue={word}
-                sx={{ marginRight: 2, marginLeft: 2 }}
+                sx={{ marginRight: 2, marginLeft: 2, width: 220 }}
               />
-
-              <Button
-                sx={{
-                  color: "#fff",
-                  height: 56,
-                  backgroundColor: lightGreen[500],
-                  "&:hover": {
-                    backgroundColor: lightGreen[700],
-                  },
-                }}
-                onClick={submitWord}
-              >
-                Submit
-              </Button>
+              <Box sx={{ display: "flex" }}>
+                <Button
+                  sx={{
+                    color: "#fff",
+                    height: 56,
+                    backgroundColor: lightGreen[500],
+                    "&:hover": {
+                      backgroundColor: lightGreen[700],
+                    },
+                  }}
+                  onClick={submitWord}
+                >
+                  Submit
+                </Button>
+                <Button
+                  sx={{
+                    color: "#fff",
+                    marginLeft: 2,
+                    height: 56,
+                    backgroundColor: purple[500],
+                    "&:hover": {
+                      backgroundColor: purple[700],
+                    },
+                  }}
+                  onClick={handleRotateBoard}
+                >
+                  Rotate
+                </Button>
+              </Box>
             </Box>
           </Box>
           <Box
             sx={{
-              bgcolor: "#E7C8DD",
+              bgcolor: "#eeeeee",
               height: 400,
               width: 400,
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-evenly",
+              animation: rotate ? `${rotateBoard} 0.8s ease` : null,
             }}
           >
             {squareGrid.map((row, i) => {
@@ -182,7 +252,9 @@ export default function BoggleCards(props: Props) {
                           animation:
                             !!errMessage && tileSelected(i, j)
                               ? `${shake} 0.5s infinite ease`
-                              : null,
+                              : rotate
+                              ? `${rotateTile} 0.8s ease`
+                              : "none",
                         }}
                       >
                         {char}
