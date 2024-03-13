@@ -94,6 +94,13 @@ export default function BoggleCards(props: Props) {
     resetWord();
     setRotate(true);
 
+    setTimeout(() => {
+      newBoardAfterRotate();
+      setRotate(false);
+    }, 800);
+  }
+
+  function newBoardAfterRotate() {
     let newGrid: string[][] = [];
     for (let i = 0; i < 4; i++) {
       let newRow: string[] = [];
@@ -104,10 +111,6 @@ export default function BoggleCards(props: Props) {
       newGrid.push(newRow);
     }
     setSquareGrid(newGrid);
-
-    setTimeout(() => {
-      setRotate(false);
-    }, 500);
   }
 
   const shake = keyframes`
@@ -124,6 +127,14 @@ export default function BoggleCards(props: Props) {
       transform: rotate(0deg);
     } to {
       transform: rotate(90deg);
+    }
+  `;
+
+  const rotateTile = keyframes`
+    from {
+      transform: rotate(0deg);
+    } to {
+      transform: rotate(-90deg);
     }
   `;
 
@@ -199,13 +210,13 @@ export default function BoggleCards(props: Props) {
           </Box>
           <Box
             sx={{
-              bgcolor: "#E7C8DD",
+              bgcolor: "#eeeeee",
               height: 400,
               width: 400,
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-evenly",
-              animation: rotate ? `${rotateBoard} 0.5s ease` : null,
+              animation: rotate ? `${rotateBoard} 0.8s ease` : null,
             }}
           >
             {squareGrid.map((row, i) => {
@@ -237,7 +248,9 @@ export default function BoggleCards(props: Props) {
                           animation:
                             !!errMessage && tileSelected(i, j)
                               ? `${shake} 0.5s infinite ease`
-                              : null,
+                              : rotate
+                              ? `${rotateTile} 0.8s ease`
+                              : "none",
                         }}
                       >
                         {char}
