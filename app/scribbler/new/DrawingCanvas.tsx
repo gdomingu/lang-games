@@ -20,6 +20,7 @@ export default function DrawingCanvas() {
     canvas.height = height * 2;
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
+    canvas.style.display = "block";
     // canvas.style.backgroundColor = "white";
     // canvas.style.border = "1px solid black";
 
@@ -64,8 +65,9 @@ export default function DrawingCanvas() {
         style={{
           border: "1px solid black",
           backgroundColor: "white",
-          // touchAction: "none",
+          touchAction: "none",
           cursor: "crosshair",
+          display: "none",
         }}
       />
     </Box>
