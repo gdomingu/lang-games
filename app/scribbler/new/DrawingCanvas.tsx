@@ -21,8 +21,6 @@ export default function DrawingCanvas() {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     canvas.style.display = "block";
-    // canvas.style.backgroundColor = "white";
-    // canvas.style.border = "1px solid black";
 
     const context = canvas?.getContext("2d");
     if (!context) return;
