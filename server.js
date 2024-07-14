@@ -20,8 +20,14 @@ app.prepare().then(() => {
     socket.on("disconnect", () => {
       console.log("Client disconnected");
     });
-    socket.on("hello", msg => {
-      io.to("my-room").emit("hello", msg);
+    socket.on("draw", msg => {
+      io.to("my-room").emit("draw", msg);
+    });
+    socket.on("draw-start", msg => {
+      io.to("my-room").emit("draw-start", msg);
+    });
+    socket.on("draw-stop", msg => {
+      io.to("my-room").emit("draw-stop", msg);
     });
   });
 

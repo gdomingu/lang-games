@@ -5,7 +5,7 @@ import {useSearchParams} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 import {io} from "socket.io-client";
 
-export default function DrawingCanvas() {
+export default function GuessingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -41,9 +41,27 @@ export default function DrawingCanvas() {
   const socket = io();
 
   useEffect(() => {
+    // Listen for the connect event to get the socket ID
+    // if (gameId) {
+
+    socket.on("draw-start", (value: {x: number; y: number}) => {
+      startDrawing({offsetX: value.x, offsetY: value.y});
+    });
+
+    socket.on("draw", (value: {x: number; y: number}) => {
+      const {x, y} = value;
+      draw({offsetX: x, offsetY: y});
+    });
+
+    socket.on("draw-stop", () => {
+      stopDrawing();
+    });
+    // } else {
+    // create game
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
     });
+    // }
 
     // Listen for connection errors
     socket.on("connect_error", error => {
@@ -53,32 +71,25 @@ export default function DrawingCanvas() {
     // Cleanup on component unmount
     return () => {
       socket.off("connect");
+      socket.off("hello");
     };
   }, []);
 
-  const startDrawing = ({nativeEvent}: React.MouseEvent<HTMLCanvasElement>) => {
-    const {offsetX, offsetY} = nativeEvent;
+  const startDrawing = ({offsetX, offsetY}: {offsetX: number; offsetY: number}) => {
     const context = canvasRef.current?.getContext("2d");
     context?.beginPath();
     context?.moveTo(offsetX, offsetY);
-    setIsDrawing(true);
-    socket.emit("draw-start", {x: offsetX, y: offsetY});
   };
 
-  const draw = ({nativeEvent}: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing) return;
-    const {offsetX, offsetY} = nativeEvent;
+  const draw = ({offsetX, offsetY}: {offsetX: number; offsetY: number}) => {
     const context = canvasRef.current?.getContext("2d");
     context?.lineTo(offsetX, offsetY);
     context?.stroke();
-    socket.emit("draw", {x: offsetX, y: offsetY});
   };
 
   const stopDrawing = () => {
     const context = canvasRef.current?.getContext("2d");
     context?.closePath();
-    setIsDrawing(false);
-    socket.emit("draw-stop");
   };
 
   return (
@@ -86,10 +97,6 @@ export default function DrawingCanvas() {
       <Box sx={{height: "70vh"}}>
         <canvas
           ref={canvasRef}
-          onMouseDown={startDrawing}
-          onMouseUp={stopDrawing}
-          onMouseOut={stopDrawing}
-          onMouseMove={draw}
           style={{
             border: "1px solid black",
             backgroundColor: "white",
