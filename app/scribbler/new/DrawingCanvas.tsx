@@ -1,18 +1,12 @@
 "use client";
-// import {socket} from "@/app/socket";
 import {Box} from "@mui/material";
-import {useSearchParams} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 import {io} from "socket.io-client";
 
-export default function DrawingCanvas() {
+export default function DrawingCanvas({roomCode}: {roomCode: string}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-
-  // Access query parameters
-  const gameId = useSearchParams().get("gameId");
-
-  console.log("gameId", gameId);
+  const socket = io();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -38,9 +32,9 @@ export default function DrawingCanvas() {
     context.lineWidth = 5;
   }, []);
 
-  const socket = io();
-
   useEffect(() => {
+    socket.emit("join-room", roomCode);
+
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
     });
@@ -62,7 +56,7 @@ export default function DrawingCanvas() {
     context?.beginPath();
     context?.moveTo(offsetX, offsetY);
     setIsDrawing(true);
-    socket.emit("draw-start", {x: offsetX, y: offsetY});
+    socket.emit("draw-start", roomCode, {x: offsetX, y: offsetY});
   };
 
   const draw = ({nativeEvent}: React.MouseEvent<HTMLCanvasElement>) => {
@@ -71,14 +65,14 @@ export default function DrawingCanvas() {
     const context = canvasRef.current?.getContext("2d");
     context?.lineTo(offsetX, offsetY);
     context?.stroke();
-    socket.emit("draw", {x: offsetX, y: offsetY});
+    socket.emit("draw", roomCode, {x: offsetX, y: offsetY});
   };
 
   const stopDrawing = () => {
     const context = canvasRef.current?.getContext("2d");
     context?.closePath();
     setIsDrawing(false);
-    socket.emit("draw-stop");
+    socket.emit("draw-stop", roomCode);
   };
 
   return (

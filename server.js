@@ -15,19 +15,19 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", socket => {
-    console.log("Client connected");
-    socket.join("my-room");
-    socket.on("disconnect", () => {
-      console.log("Client disconnected");
+    socket.on("join-room", roomCode => {
+      socket.join(roomCode);
+      console.log(`Client joined room: ${roomCode}`);
     });
-    socket.on("draw", msg => {
-      io.to("my-room").emit("draw", msg);
+
+    socket.on("draw", (roomCode, msg) => {
+      io.to(roomCode).emit("draw", msg);
     });
-    socket.on("draw-start", msg => {
-      io.to("my-room").emit("draw-start", msg);
+    socket.on("draw-start", (roomCode, msg) => {
+      io.to(roomCode).emit("draw-start", msg);
     });
-    socket.on("draw-stop", msg => {
-      io.to("my-room").emit("draw-stop", msg);
+    socket.on("draw-stop", (roomCode, msg) => {
+      io.to(roomCode).emit("draw-stop", msg);
     });
   });
 

@@ -2,17 +2,11 @@
 // import {socket} from "@/app/socket";
 import {Box} from "@mui/material";
 import {useSearchParams} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import {io} from "socket.io-client";
 
 export default function GuessingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-
-  // Access query parameters
-  const gameId = useSearchParams().get("gameId");
-
-  console.log("gameId", gameId);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -40,9 +34,10 @@ export default function GuessingCanvas() {
 
   const socket = io();
 
+  const roomCode = useSearchParams().get("roomCode");
+
   useEffect(() => {
-    // Listen for the connect event to get the socket ID
-    // if (gameId) {
+    socket.emit("join-room", roomCode);
 
     socket.on("draw-start", (value: {x: number; y: number}) => {
       startDrawing({offsetX: value.x, offsetY: value.y});
@@ -71,7 +66,6 @@ export default function GuessingCanvas() {
     // Cleanup on component unmount
     return () => {
       socket.off("connect");
-      socket.off("hello");
     };
   }, []);
 
@@ -101,7 +95,6 @@ export default function GuessingCanvas() {
             border: "1px solid black",
             backgroundColor: "white",
             touchAction: "none",
-            cursor: "crosshair",
             display: "none",
           }}
         />
