@@ -17,7 +17,6 @@ app.prepare().then(() => {
   io.on("connection", socket => {
     socket.on("join-room", roomCode => {
       socket.join(roomCode);
-      console.log(`Client joined room: ${roomCode}`);
     });
 
     socket.on("draw", (roomCode, msg) => {
@@ -28,6 +27,9 @@ app.prepare().then(() => {
     });
     socket.on("draw-stop", (roomCode, msg) => {
       io.to(roomCode).emit("draw-stop", msg);
+    });
+    socket.on("style-change", (roomCode, msg) => {
+      io.to(roomCode).emit("style-change", msg);
     });
   });
 

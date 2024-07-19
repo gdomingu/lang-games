@@ -2,10 +2,13 @@
 import {Box} from "@mui/material";
 import {useEffect, useRef, useState} from "react";
 import {io} from "socket.io-client";
+import ColorPicker from "./ColorPicker";
 
 export default function DrawingCanvas({roomCode}: {roomCode: string}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [color, setColor] = useState("#000000");
+
   const socket = io();
 
   useEffect(() => {
@@ -28,9 +31,17 @@ export default function DrawingCanvas({roomCode}: {roomCode: string}) {
     if (!context) return;
     context.scale(2, 2); // Adjust for High DPI screens
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = color;
     context.lineWidth = 5;
   }, []);
+
+  useEffect(() => {
+    const context = canvasRef.current?.getContext("2d");
+    if (!context) return;
+    context.strokeStyle = color;
+
+    socket.emit("style-change", roomCode, {color});
+  }, [color]);
 
   useEffect(() => {
     socket.emit("join-room", roomCode);
@@ -93,6 +104,7 @@ export default function DrawingCanvas({roomCode}: {roomCode: string}) {
           }}
         />
       </Box>
+      <ColorPicker setColor={setColor}></ColorPicker>
     </>
   );
 }

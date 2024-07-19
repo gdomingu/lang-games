@@ -2,11 +2,12 @@
 // import {socket} from "@/app/socket";
 import {Box} from "@mui/material";
 import {useSearchParams} from "next/navigation";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {io} from "socket.io-client";
 
 export default function GuessingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [color, setColor] = useState("#000000");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,9 +29,17 @@ export default function GuessingCanvas() {
     if (!context) return;
     context.scale(2, 2); // Adjust for High DPI screens
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = color;
     context.lineWidth = 5;
   }, []);
+
+  useEffect(() => {
+    const context = canvasRef.current?.getContext("2d");
+    if (!context) return;
+    context.strokeStyle = color;
+
+    socket.emit("style-change", roomCode, {color});
+  }, [color]);
 
   const socket = io();
 
@@ -51,16 +60,18 @@ export default function GuessingCanvas() {
     socket.on("draw-stop", () => {
       stopDrawing();
     });
-    // } else {
-    // create game
+
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
     });
-    // }
 
     // Listen for connection errors
     socket.on("connect_error", error => {
       console.error("Connection error:", error);
+    });
+
+    socket.on("style-change", (value: {color: string}) => {
+      setColor(value.color);
     });
 
     // Cleanup on component unmount
