@@ -4,12 +4,14 @@ import DrawingCanvas from "./DrawingCanvas";
 
 export default function Page() {
   const [joinUrl, setJoinUrl] = useState("");
-  const roomCode = Math.random().toString(36).substring(2, 8);
+  const [roomCode, setRoomCode] = useState("");
 
   useEffect(() => {
     // This code runs only on the client side
-    const url = `${window.location.origin}/scribbler/join?roomCode=${roomCode}`;
+    const code = Math.random().toString(36).substring(2, 8);
+    const url = `${window.location.origin}/scribbler/join?roomCode=${code}`;
     setJoinUrl(url);
+    setRoomCode(code); // need to use state for this or code will be differennt between url and params
   }, []);
 
   return (

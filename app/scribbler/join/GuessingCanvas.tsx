@@ -7,7 +7,7 @@ import {io} from "socket.io-client";
 
 export default function GuessingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState("black");
 
   useEffect(() => {
     const canvas = canvasRef.current;
