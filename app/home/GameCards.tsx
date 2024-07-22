@@ -1,29 +1,44 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Stack, Typography, Box } from '@mui/material';
-import Link from 'next/link';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Stack,
+  Typography,
+  Box,
+} from "@mui/material";
+import Link from "next/link";
 
 export default function MediaCard() {
   const cardData = [
     {
-      title: "Pictionary",
-      description: "A game where you draw and guess the word. You can upload your own word list.",
+      title: "Scribbler",
+      description:
+        "A game where you draw and guess the word. " +
+        "You can upload your own word list.",
       image: "../pictionary-placeholder.jpg",
-      link: "/pictionary",
+      link: "/scribbler",
     },
     {
       title: "Boggle",
-      description: "A game where you find words in a grid of letters. You can choose your alphabet and letter distribution.",
+      description:
+        "A game where you find words in a grid of letters. " + 
+        "You can choose your alphabet and letter distribution.",
       image: "../boggle-placeholder.jpg",
-      link: "/boggle"
-    }
-  ]
+      link: "/boggle",
+    },
+  ];
 
   return (
     <Stack direction="row" spacing={2}>
       {cardData.map((card, index) => {
         return (
-          <Card key={index} sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column' }}>
+          <Card
+            key={index}
+            sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}
+          >
             <Box sx={{ flexGrow: 1 }}>
-
               <CardMedia
                 sx={{ height: 140 }}
                 image={card.image}
@@ -44,7 +59,7 @@ export default function MediaCard() {
               </Link>
             </CardActions>
           </Card>
-        )
+        );
       })}
     </Stack>
   );
