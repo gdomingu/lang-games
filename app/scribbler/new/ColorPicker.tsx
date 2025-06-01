@@ -7,7 +7,7 @@ export default function ColorPicker({setColor}: {setColor: Dispatch<SetStateActi
     setColor(color);
   };
   return (
-    <div>
+    <span>
       {colors.map(color => (
         <button
           key={color}
@@ -15,6 +15,6 @@ export default function ColorPicker({setColor}: {setColor: Dispatch<SetStateActi
           onClick={() => handleColorChange(color)}
         />
       ))}
-    </div>
+    </span>
   );
 }

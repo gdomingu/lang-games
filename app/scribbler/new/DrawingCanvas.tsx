@@ -1,5 +1,6 @@
 "use client";
-import {Box} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {Box, IconButton} from "@mui/material";
 import {useEffect, useRef, useState} from "react";
 import {io} from "socket.io-client";
 import ColorPicker from "./ColorPicker";
@@ -86,6 +87,22 @@ export default function DrawingCanvas({roomCode}: {roomCode: string}) {
     socket.emit("draw-stop", roomCode);
   };
 
+  const ClearButton = () => {
+    return (
+      <IconButton
+        onClick={() => {
+          const context = canvasRef.current?.getContext("2d");
+          if (context) {
+            context.clearRect(0, 0, canvasRef.current?.width || 0, canvasRef.current?.height || 0);
+          }
+          socket.emit("clear-canvas", roomCode);
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    );
+  };
+
   return (
     <>
       <Box sx={{height: "70vh"}}>
@@ -104,7 +121,10 @@ export default function DrawingCanvas({roomCode}: {roomCode: string}) {
           }}
         />
       </Box>
-      <ColorPicker setColor={setColor}></ColorPicker>
+      <Box marginTop="8px" display="inline-flex" alignItems="center">
+        <ColorPicker setColor={setColor}></ColorPicker>
+        <ClearButton />
+      </Box>
     </>
   );
 }
