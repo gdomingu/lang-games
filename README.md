@@ -1,3 +1,34 @@
+# Language Games
+
+A [TanStack Start](https://tanstack.com/start) app containing Boggle and Scribbler.
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). This starts Vite and the local Socket.IO relay together. To run only the web app, use `npm run dev:web`.
+
+## Checks
+
+```bash
+npm run typecheck
+npm run build
+```
+
+## Deploy to Vercel
+
+Import the repository into Vercel. The checked-in `vercel.json` selects Vite and runs the TanStack Start production build.
+
+Scribbler uses Socket.IO. Vercel Functions do not provide a persistent WebSocket server, so deploy `server.cjs` to a long-running Node host and set this Vercel environment variable:
+
+```text
+VITE_SOCKET_URL=https://your-socket-service.example.com
+```
+
+Set `APP_ORIGIN` on the Socket.IO host to the deployed Vercel URL. The relay listens on `SOCKET_PORT` (default `3001`). Boggle and the rest of the site need no additional services.
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
